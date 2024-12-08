@@ -10,12 +10,12 @@ pub fn part_1(input: &str) -> isize {
     // 2) Sort em, Johnny!
     v1.sort();
     v2.sort();
-    // Calculate the individual differences and push to a 3rd list
+    // 3) Calculate the individual differences and push to a 3rd list
     let mut v3: Vec<isize> = vec![];
     for (i, val) in v1.iter().enumerate() {
         v3.push((val - v2[i]).abs()) // Pushes absolute value of signed int diffs
     }
-    // 3) Calculate the cumulative deltas
+    // 4) Calculate the cumulative deltas
     let mut diff = 0;
     for e in v3 {
         diff += e
@@ -41,7 +41,7 @@ pub fn part_2(input: &str) -> isize {
                 counter += 1
             }
         }
-        v3.push(counter * *v1val) 
+        v3.push(counter * *v1val)
     }
     // 3) Add similarity scores for cumulative similarity score across lists
     let mut sim_score = 0;
@@ -56,26 +56,29 @@ mod tests {
     use super::*;
 
     #[test]
-    /** Asserts that the stopping floor is 4 */
     fn d01_1() {
-        let input = String::from("3   4
+        let input = String::from(
+            "3   4
 4   3
 2   5
 1   3
 3   9
-3   3");
+3   3",
+        );
         assert_eq!(part_1(&input), 11);
     }
 
     #[test]
-    /** Asserts that the stopping floor is 4 */
+    /** Who knew they'd re-use the same test data? */
     fn d01_2() {
-        let input = String::from("3   4
+        let input = String::from(
+            "3   4
 4   3
 2   5
 1   3
 3   9
-3   3");
+3   3",
+        );
         assert_eq!(part_2(&input), 31);
     }
 }
