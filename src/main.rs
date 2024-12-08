@@ -35,8 +35,8 @@ fn day2() {
     println!("Total safe sequences d2.1: {ans}");
 
     // Day 2 part 2
-    let input = lib::file_reader("d02.txt");
-    let _input = String::from(
+    let _input = lib::file_reader("d02.txt");
+    let input = String::from(
         "7 6 4 2 1
 1 2 7 8 9
 9 7 6 2 1
@@ -49,6 +49,6 @@ fn day2() {
 60 63 60 59 58 55 53 53
 25 28 25 22 20 17 13",
     );
-    let ans = d02::part_2_2(&input);
+    let ans = d02::part_2(&input);
     println!("Total safe sequences d2.2: {ans}");
 }
