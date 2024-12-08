@@ -21,9 +21,7 @@ pub fn part_2(input: &str) -> usize {
     // 1) Read each input line into a vec
     let lines = parse_input(input);
 
-    // 2) Each sequence is safe if there is one element that can be removed
-    // while still passing the other checks through each sequence by checking
-    // that its safe if it has at least one index you can you skip
+    // 2) Brute force check eash sequence with a skip value
     let mut safe = 0;
     for vec in lines {
         for i in 0..vec.len() {
@@ -65,7 +63,7 @@ fn parse_input(input: &str) -> Vec<Vec<i32>> {
  pass all safety checks */
 fn is_safe(input: &Vec<i32>, skip: Option<usize>) -> bool {
     let safe = true;
-    let skip = skip.unwrap_or(100);
+    let skip = skip.unwrap_or(100); // If None, value is impossibly high
     // 1) Builds a temporary list without the skipped element
     let mut temp: Vec<&i32> = vec![];
     for (i, val) in input.iter().enumerate() {
