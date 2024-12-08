@@ -18,3 +18,17 @@ pub fn file_reader(file: &str) -> String {
     }
     file_contents
 }
+
+pub fn parse_input(input: &str) -> Vec<Vec<i32>> {
+    // 1) Read each input line into a vec
+    let mut lines: Vec<Vec<i32>> = vec![];
+    for e in input.lines() {
+        let vec: Vec<i32> = e
+            .split_whitespace()
+            .map(|s| s.parse::<i32>().unwrap())
+            .collect();
+        lines.push(vec);
+    }
+    lines
+}
+

@@ -2,4 +2,4 @@
 target/
 
 # No cheating!
-input/*
+input/*.txt
