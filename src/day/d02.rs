@@ -1,58 +1,39 @@
+/***/
 pub fn part_1(input: &str) -> usize {
     // 1) Read each input line into a vec
     let lines = parse_input(input);
 
-    // 2) Compare values linearly
+    // 2) Check each sequence
     let mut safe = 0;
-    'outer: for e in &lines {
-        // 2.1) Check for monotonic increments
-        let mut increasing = true;
-        let mut decreasing = true;
-        for i in 1..e.len() {
-            if e[i] < e[i - 1] {
-                increasing = false;
-            }
-            if e[i] > e[i - 1] {
-                decreasing = false;
-            }
-            // Unsafe if the sequence is neither increasing nor decreasing
-            if !increasing && !decreasing {
-                //println!("Unsafe (monotonic): {:?}", e);
-                continue 'outer; // Proceed to the next sequence
-            }
+    for vec in lines {
+        if is_safe(&vec, None) {
+            //println!("\tSafe: {:?}", vec);
+            safe += 1;
+        } else {
+            //println!("\tUnsafe: {:?}", vec);
         }
-        // 2.2) Check that each sequence progresses by 1, 2, or 3
-        for i in 0..e.len() - 1 {
-            // Check min & max diff
-            let diff = (e[i] - e[i + 1]).abs();
-            if diff < 1 || diff > 3 {
-                //println!("Unsafe (diff): {:?}", e);
-                continue 'outer; // Proceed to the next sequence
-            }
-        }
-        //println!("Safe: {:?}", e);
-        safe += 1;
     }
-    // 3) Return the number of safe sequences
     safe
 }
 
+/***/
 pub fn part_2(input: &str) -> usize {
     // 1) Read each input line into a vec
     let lines = parse_input(input);
 
-    // 2) Brute force check iterates through each sequence and by checking
-    // that its safe if it has at least one index you can you skip an index
+    // 2) Each sequence is safe if there is one element that can be removed
+    // while still passing the other checks through each sequence by checking
+    // that its safe if it has at least one index you can you skip
     let mut safe = 0;
     for vec in lines {
         for i in 0..vec.len() {
-            if is_safe(&vec, i) {
-                println!("Safe: {:?}", vec);
+            if is_safe(&vec, Some(i)) {
+                //println!("\tSafe: {:?}", vec);
                 safe += 1;
                 break;
             }
             if i == vec.len() - 1 {
-                println!("Unsafe: {:?}", vec);
+                //println!("\tUnsafe: {:?}", vec);
             }
         }
     }
@@ -75,10 +56,17 @@ fn parse_input(input: &str) -> Vec<Vec<i32>> {
     lines
 }
 
-// Essentially just a modified version of part 1
-pub fn is_safe(input: &Vec<i32>, skip: usize) -> bool {
+/** Each sequence is safe if:
+ - The sequence is monotonic
+ - The diff between values in the sequence is > 0 and < 4 
+
+ NOTE: The skip parameter allows the sequence to be safe
+ if the removal of a single index allows the sequence to 
+ pass all safety checks */
+fn is_safe(input: &Vec<i32>, skip: Option<usize>) -> bool {
     let safe = true;
-    // 1) Builds a new list without the skipped element
+    let skip = skip.unwrap_or(100);
+    // 1) Builds a temporary list without the skipped element
     let mut temp: Vec<&i32> = vec![];
     for (i, val) in input.iter().enumerate() {
         if i == skip {
@@ -87,7 +75,7 @@ pub fn is_safe(input: &Vec<i32>, skip: usize) -> bool {
         temp.push(val);
     }
 
-    // 2) Check for monotonic increments
+    // 2) Checks the sequence for monotonic increments
     let mut increasing = true;
     let mut decreasing = true;
     for i in 1..temp.len() {
@@ -103,7 +91,7 @@ pub fn is_safe(input: &Vec<i32>, skip: usize) -> bool {
         }
     }
 
-    // 2) Check that each sequence progresses by 1, 2, or 3
+    // 2) Checks that each sequence progresses by 1, 2, or 3
     for i in 0..temp.len() - 1 {
         let diff = (temp[i] - temp[i + 1]).abs();
         if diff < 1 || diff > 3 {

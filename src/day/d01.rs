@@ -11,14 +11,9 @@ pub fn part_1(input: &str) -> isize {
     v1.sort();
     v2.sort();
     // 3) Calculate the individual differences and push to a 3rd list
-    let mut v3: Vec<isize> = vec![];
-    for (i, val) in v1.iter().enumerate() {
-        v3.push((val - v2[i]).abs()) // Pushes absolute value of signed int diffs
-    }
-    // 4) Calculate the cumulative deltas
     let mut diff = 0;
-    for e in v3 {
-        diff += e
+    for (i, val) in v1.iter().enumerate() {
+        diff += (val - v2[i]).abs() // Pushes absolute value of signed int diffs
     }
     diff
 }
@@ -33,7 +28,7 @@ pub fn part_2(input: &str) -> isize {
         v2.push(split.next().unwrap().parse().ok().unwrap());
     }
     // 2) Compare the lists in O(n^2) time for frequency of appearance as similiarity score
-    let mut v3: Vec<isize> = vec![];
+    let mut sim_score = 0;
     for (_, v1val) in v1.iter().enumerate() {
         let mut counter = 0;
         for (v2i, _) in v2.iter().enumerate() {
@@ -41,12 +36,7 @@ pub fn part_2(input: &str) -> isize {
                 counter += 1
             }
         }
-        v3.push(counter * *v1val)
-    }
-    // 3) Add similarity scores for cumulative similarity score across lists
-    let mut sim_score = 0;
-    for e in v3 {
-        sim_score += e
+        sim_score += counter * *v1val
     }
     sim_score
 }
